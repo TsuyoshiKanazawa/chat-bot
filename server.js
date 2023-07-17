@@ -17,7 +17,7 @@ app.post('/api/chat', async (req, res) => {
     const openai = axios.create({
         baseURL: 'https://api.openai.com/v1',
         headers: {
-            'Authorization': `Bearer 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`,
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             'Content-Type': 'application/json',
         },
     });
