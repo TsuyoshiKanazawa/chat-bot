@@ -22,6 +22,7 @@ app.post('/api/chat', async (req, res) => {
         },
     });
 
+    
     const systemMessage = {
         role: "assistant",
         content: "You are a helpful assistant."
