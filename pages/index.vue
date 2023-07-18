@@ -1,86 +1,103 @@
 <template>
-  <div id="chat">
-    <div id="chat-history">
-      <div v-for="(message, index) in messages" :key="index" :class="message.sender">
-        {{ message.content }}
+
+  <div>
+    <Header />
+    <div class="section">
+      <div class="title">
+        <img src="~/assets/images/number1.jpg">
+        <h1>AIに相談したいことは？</h1>
+      </div>
+
+      <div class="consultImage">
+        <div :class="[getImageClass('image1')]" @click="selectImage('image1')" >
+          <img src="~/assets/images/management.png"/>
+          <div class="g_container">
+            <img src="~/assets/images/gradation.jpg" class="gradation"/>
+            <p>自社の経営課題を見つけたい</p>
+          </div>
+        </div>
+        
+        <div :class="[getImageClass('image2')]" @click="selectImage('image2')" >
+          <img src="~/assets/images/strength.png"/>
+          <div class="g_container">
+            <img src="~/assets/images/gradation.jpg" class="gradation"/>
+            <p>自社の強みを見つけたい</p>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="input-area">
-      <input v-model="input" @keyup.enter="submit" placeholder="Type your message here...">
+
+    <div class="section">
+      <div class="title">
+        <img src="~/assets/images/number2.jpg">
+        <h1>どんなAIに相談したい？</h1>
+      </div>
     </div>
+
+    <div class="section">
+      <div class="title">
+        <img src="~/assets/images/number3.jpg">
+        <h1>あなたの基本情報は？</h1>
+      </div>
+    </div>
+
+    <button @click="openComponent">Open Component</button>
+
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <component :is="selectedImageComponent" />
+        <button @click="closeComponent">Close</button>
+      </div>
+    </div>
+
   </div>
+  
 </template>
 
 <script>
+import ChatWindow from '@/components/ChatWindow.vue';
+
 export default {
   data() {
     return {
-      input: '',
-      messages: [],
+      selectedImage: 'image1',
+      showModal: false,
+      image1: '/path/to/image1.jpg',
+      image2: '/path/to/image2.jpg'
     };
   },
-  methods: {
-    async submit() {
-      const message = this.input;
-      this.messages.push({ content: message, sender: 'user' });
-      this.input = '';
-
-      try {
-        const res = await this.$axios.$post('/api/chat', { message });
-        this.messages.push({ content: res.message, sender: 'bot' });
-      } catch (error) {
-        console.error(error);
+  computed: {
+    selectedImageComponent() {
+      if (this.selectedImage === 'image1') {
+        return ChatWindow;
+      } else if (this.selectedImage === 'image2') {
+        return ChatWindow;
       }
-    },
-    
+      return null;
+    }
   },
+  methods: {
+    selectImage(image) {
+      this.selectedImage = image;
+    },
+    openComponent() {
+      this.showModal = true;
+    },
+    closeComponent() {
+      this.showModal = false;
+    },
+    getImageClass(image) {
+      return {
+        selected: this.selectedImage === image,
+        notSelected: this.selectedImage !== image
+      };
+    }
+  },
+  components: {
+    ChatWindow,
+  }
 };
+
 </script>
 
-<style>
-#chat {
-  display: flex;
-  flex-direction: column;
-  height: 80vh;
-  width: 600px;
-  margin: auto;
-  border: 3px solid #007bff;
-  border-radius: 10px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f3f3f3;
-}
 
-#chat-history {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1em;
-}
-
-#input-area {
-  padding: 1em;
-  border-top: 1px solid #ccc;
-}
-
-.user {
-  align-self: flex-end;
-  background-color: #007bff;
-  color: white;
-  width: 60%;
-  margin: 0 0 0 auto;
-  border-radius: 10px;
-  margin-bottom: 1em;
-  padding: 0.5em;
-}
-
-.bot {
-  align-self: flex-start;
-  background-color: #fff;
-  width: 60%;
-  border-radius: 10px;
-  margin-bottom: 1em;
-  padding: 0.5em;
-}
-</style>
