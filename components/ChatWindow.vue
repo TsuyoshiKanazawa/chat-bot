@@ -2,11 +2,17 @@
     <div id="chat">
         <div id="chat-history">
             <div v-for="(message, index) in messages" :key="index" :class="message.sender">
-                {{ message.content }}
+                <div v-if="message.sender === 'bot'">
+                    <img src="~/assets/images/assistantIcon.png" alt="Bot Image" />
+                    {{ message.content }}
+                </div>
+                <div v-else>
+                    {{ message.content }}
+                </div>
             </div>
         </div>
         <div id="input-area">
-            <textarea ref="myTextarea" @input="adjustTextareaHeight" v-model="input" @keyup.enter="submit"></textarea>
+            <textarea ref="myTextarea" v-model="input" @keyup.enter="submit"></textarea>
             <button @click="submit">
                 <img src="~/assets/images/submitButton.png"/>
             </button>
@@ -22,9 +28,7 @@ export default {
             messages: [],
         };
     },
-    mounted() {
-        this.adjustTextareaHeight();
-    },
+
     methods: {
         async submit() {
             const message = this.input;
@@ -39,10 +43,7 @@ export default {
             }
         },
 
-        adjustTextareaHeight() {
-            this.$refs.myTextarea.style.height = 'auto';
-            this.$refs.myTextarea.style.height = this.$refs.myTextarea.scrollHeight + 'px';
-        }
+
     },
 };
 </script>
