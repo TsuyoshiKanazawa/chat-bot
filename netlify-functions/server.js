@@ -4,6 +4,8 @@ const axios = require('axios');
 const app = express();
 const router = express.Router();
 
+app.use(express.json());
+
 // チャット履歴を保持するための配列
 const chatHistory = [];
 
