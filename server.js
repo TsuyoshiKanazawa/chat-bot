@@ -22,7 +22,6 @@ app.post('/api/chat', async (req, res) => {
         },
     });
 
-    
     const systemMessage = {
         role: "assistant",
         content: "You are a helpful assistant."
@@ -33,7 +32,6 @@ app.post('/api/chat', async (req, res) => {
     };
 
     // チャット履歴を更新する
-    chatHistory.push(systemMessage);
     chatHistory.push(userMessage);
 
     const messages = [...chatHistory];
@@ -61,6 +59,12 @@ app.post('/api/chat', async (req, res) => {
         console.error(err.response.data);
         res.status(500).send(err.toString());
     }
+});
+
+app.post('/api/reset', (req, res) => {
+    // チャット履歴をリセットする
+    chatHistory.length = 0;
+    res.json({ 'message': 'Chat history has been reset.' });
 });
 
 app.listen(5000, () => console.log('Server is listening on port 5000'));

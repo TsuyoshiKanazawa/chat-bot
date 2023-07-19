@@ -7,7 +7,7 @@ body {
 
 .header {
     background: linear-gradient(90deg,#36D1DC, #5B86E5);
-    width: 100vw;
+    width: 100%;
     height: 50px;
 }
 
@@ -23,7 +23,7 @@ body {
 .section {
     width: 860px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 90px;
 }
 
 .title {
@@ -48,7 +48,6 @@ body {
     justify-content: center;
     gap: 40px;
     text-align: center;
-    cursor: pointer;
 }
 
 .g_container {
@@ -61,6 +60,7 @@ body {
 
 .g_container p {
     font-size: 20px;
+    font-weight: 700;
     color: white;
     position: absolute;
     top: 50%;
@@ -81,8 +81,143 @@ body {
 
 .notSelected {
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .notSelected:hover {
+    transform: scale(1.03);
+}
+
+.kinds_Container {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin-top: 30px;
+}
+
+.AiKinds {}
+
+.AiKinds .icon {
+    border-radius: 50%;
+}
+
+.kind {
+    width: 220px;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 50%;
+    position: relative;
+}
+
+.AiKinds .kind .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.AiKinds .kind .grad {
+    width: 220px;
+    height: 220px;
+    background: #5F6368;
+}
+
+.kindName {
+    width: 220px;
+    height: 50px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.kindName p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    margin: 0;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.AiKinds .kindName .gradation {
+    width: 220px;
+    display: none;
+}
+
+.selected .kind .grad {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(90deg, #2193B0, #6DD5ED);
+}
+
+.selected .kindName .gradation {
+    width: 220px;
+    height: 50px;
+    display: block;
+}
+
+.selected .kindName .gradation_g {
+    width: 220px;
+    height: 50px;
+    display: none;
+}
+
+.space {
+    height: 50px;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.form label {
+    width: 140px;
+    height: 40px;
+    font-size: 16px;
+    color: white;
+    line-height: 40px;
+    font-weight: 500;
+    text-align: center;
+    background: linear-gradient(90deg, #2193B0, #6DD5ED);
+}
+
+.form input {
+    border: none;
+    background-color: #F6F6F6;
+    width: 720px;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    font-weight: 500;
+}
+
+::placeholder {
+    color: #DDDDDD;
+    font-weight: 700;
+}
+
+.openChat {
+    width: 500px;
+    height: 70px;
+    background-image: url("~@/assets/images/gradation_L.jpg");
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+    display: block;
+    margin: 50px auto;
+    font-size: 24px;
+    color: white;
+    font-weight: 600;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.openChat:hover {
     transform: scale(1.03);
 }
