@@ -1,8 +1,11 @@
 const express = require('express');
 const serverless = require('serverless-http');
+const axios = require('axios');
 const app = express();
 const router = express.Router();
 
+// チャット履歴を保持するための配列
+const chatHistory = [];
 
 router.post('/api/chat', async (req, res) => {
     const userInput = req.body.message;
