@@ -3,4 +3,4 @@
   functions = "netlify-functions"
   publish = "dist"
   debug = true
-  NODE_VERSION = "14.15.1"
+  NODE_VERSION = "16.20.0"
