@@ -57,7 +57,7 @@ export default {
     methods: {
         async close() {
             try {
-                await this.$axios.$post('/.netlify/functions/server/api/reset');
+                await this.$axios.$post('/api/reset');
                 this.$emit('closeComponent');
             } catch (error) {
                 console.error(error);
@@ -87,7 +87,7 @@ export default {
                 this.input = '';
 
                 try {
-                    const res = await this.$axios.$post('/.netlify/functions/server/api/chat', { message });
+                    const res = await this.$axios.$post('/api/chat', { message });
                     this.messages.push({ content: res.message, sender: 'bot' });
                 } catch (error) {
                     console.error(error);
@@ -97,7 +97,7 @@ export default {
 
         async initializeChat() {
             try {
-                const res = await this.$axios.$post('/.netlify/functions/server/api/chat', { message });
+                const res = await this.$axios.$post('/api/chat', { message: this.initialMessage });
                 this.messages.push({ content: res.message, sender: 'bot' });
             } catch (error) {
                 console.error(error);
