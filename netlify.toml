@@ -2,6 +2,6 @@
   publish = "dist"
   command = "npm run generate"
   functions = "api"
-
+ 
 [build.environment]
   NODE_VERSION = "14"
