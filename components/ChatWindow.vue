@@ -90,7 +90,7 @@ export default {
                     const res = await this.$axios.$post('/chat', { message });
                     this.messages.push({ content: res.message, sender: 'bot' });
                 } catch (error) {
-                    console.error(error);
+                    console.error('Error in submit:', error);
                 }
             }
         },
@@ -101,7 +101,7 @@ export default {
                 const res = await this.$axios.$post('/chat', { message: this.initialMessage });
                 this.messages.push({ content: res.message, sender: 'bot' });
             } catch (error) {
-                console.error(error);
+                console.error('Error in initializeChat:', error);
             }
         },
 

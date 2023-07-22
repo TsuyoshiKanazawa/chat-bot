@@ -1,6 +1,7 @@
 const axios = require('axios');
 
 exports.handler = async function (event, context) {
+    console.log("Received chat request");
     const userInput = JSON.parse(event.body).message;
     const chatHistory = JSON.parse(event.body).chatHistory;  // クライアントから送られてきたチャット履歴を取得
 
