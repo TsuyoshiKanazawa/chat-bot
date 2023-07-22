@@ -1,6 +1,0 @@
-[build]
-  command = "npm run build"
-  functions = "netlify-functions"
-  publish = "dist"
-  debug = true
-  NODE_VERSION = "16.20.0"

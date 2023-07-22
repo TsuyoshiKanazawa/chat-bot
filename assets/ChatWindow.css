@@ -62,13 +62,15 @@
 }
 
 textarea {
+    box-sizing: border-box;
     border: none;
     resize: none;
     width: 730px;
+    height: 45px;
     border-radius: 20px;
     display: block;
     margin: auto;
-    padding: 15px;
+    padding: 9px 10px;
     overflow: hidden;
 }
 
@@ -78,6 +80,11 @@ textarea {
     position: absolute;
     bottom: 15px;
     right: 3%;
+    transition: 0.3s;
+}
+
+#input-area button:hover {
+    transform: scale(1.07);
 }
 
 .user {

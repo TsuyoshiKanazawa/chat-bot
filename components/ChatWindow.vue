@@ -4,7 +4,7 @@
         <div id="chat-history">
             <div v-for="(message, index) in messages" :key="index" :class="message.sender">
                 <div v-if="message.sender === 'bot'">
-                    <img :src="`_nuxt/assets/images/${aiKind}.png`" alt="Bot Image" />
+                    <img :src="require(`~/assets/images/${aiKind}.png`)" alt="Bot Image" />
                     {{ message.content }}
                 </div>
                 <div v-else>
@@ -13,7 +13,7 @@
             </div>
         </div>
         <div id="input-area">
-            <textarea ref="myTextarea" v-model="input" @keyup.enter="submit"></textarea>
+            <textarea ref="myTextarea" v-model="input" ></textarea>
             <button @click="submit">
                 <img src="~/assets/images/submitButton.png"/>
             </button>
@@ -103,6 +103,8 @@ export default {
                 console.error(error);
             }
         },
+
+
     },
     beforeDestroy() {
         this.messages = [];
