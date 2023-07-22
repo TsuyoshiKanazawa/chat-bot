@@ -1,10 +1,8 @@
 const axios = require('axios');
 
-// チャット履歴を保持するための配列
-let chatHistory = [];
-
 exports.handler = async function (event, context) {
     const userInput = JSON.parse(event.body).message;
+    const chatHistory = JSON.parse(event.body).chatHistory;  // クライアントから送られてきたチャット履歴を取得
 
     const openai = axios.create({
         baseURL: 'https://api.openai.com/v1',
@@ -14,29 +12,12 @@ exports.handler = async function (event, context) {
         },
     });
 
-    const userMessage = {
-        role: "user",
-        content: userInput
-    };
-
-    // チャット履歴を更新する
-    chatHistory.push(userMessage);
-
-    const messages = [...chatHistory];
-
     try {
         const response = await openai.post('/chat/completions', {
             model: "gpt-3.5-turbo",
-            messages: messages
+            messages: chatHistory  // 取得したチャット履歴をそのまま使用
         });
         const assistantMessage = response.data.choices[0].message.content;
-
-        // ボットの応答をチャット履歴に追加
-        const botMessage = {
-            role: "assistant",
-            content: assistantMessage
-        };
-        chatHistory.push(botMessage);
 
         return {
             statusCode: 200,
