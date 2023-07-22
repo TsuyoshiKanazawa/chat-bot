@@ -1,7 +1,7 @@
 [build]
   publish = "dist"
   command = "npm run generate"
-  functions = "api"
+  functions = "functions"
 
 [build.environment]
   NODE_VERSION = "14"
