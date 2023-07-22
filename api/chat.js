@@ -1,27 +1,48 @@
 const axios = require('axios');
 
+// チャット履歴を保持するための配列
+let chatHistory = [];
+
 exports.handler = async function (event, context) {
     console.log("Received chat request");
 
+    const userInput = JSON.parse(event.body).message;
+
+    const openai = axios.create({
+        baseURL: 'https://api.openai.com/v1',
+        headers: {
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const userMessage = {
+        role: "user",
+        content: userInput
+    };
+
+    // チャット履歴を更新する
+    chatHistory.push(userMessage);
+
+    console.log("User message:", userMessage); // 追加
+
+    const messages = [...chatHistory];
+
     try {
-        const assistantId = process.env.ASSISTANT_ID;
-        const assistant = new AssistantV2({
-            version: '2022-02-10',
-            authenticator: new IamAuthenticator({
-                apikey: process.env.ASSISTANT_IAM_APIKEY,
-            }),
-            serviceUrl: process.env.ASSISTANT_URL,
+        const response = await openai.post('/chat/completions', {
+            model: "gpt-3.5-turbo",
+            messages: messages
         });
-
-        console.log("Assistant created"); // 追加
-
-        const sessionId = await getOrCreateSessionId(assistantId, assistant);
-
-        console.log("Session id:", sessionId); // 追加
-
-        const assistantMessage = await getAssistantMessage(assistantId, assistant, sessionId, event.body.message);
+        const assistantMessage = response.data.choices[0].message.content;
 
         console.log("Assistant message:", assistantMessage); // 追加
+
+        // ボットの応答をチャット履歴に追加
+        const botMessage = {
+            role: "assistant",
+            content: assistantMessage
+        };
+        chatHistory.push(botMessage);
 
         return {
             statusCode: 200,
