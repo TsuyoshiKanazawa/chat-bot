@@ -45,7 +45,7 @@ export default {
   ],
   
   axios: {
-    baseURL: '/api'
+    baseURL: '/.netlify/functions'
   },
 
   serverMiddleware: [
