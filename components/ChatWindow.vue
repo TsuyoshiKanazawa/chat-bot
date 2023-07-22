@@ -95,6 +95,7 @@ export default {
             }
         },
 
+        
         async initializeChat() {
             try {
                 const res = await this.$axios.$post('/api/chat', { message: this.initialMessage });
