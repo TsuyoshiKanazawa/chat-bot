@@ -57,7 +57,7 @@ export default {
     methods: {
         async close() {
             try {
-                await this.$axios.$post('/api/reset');
+                await this.$axios.$post('/reset');
                 this.$emit('closeComponent');
             } catch (error) {
                 console.error(error);
