@@ -30,7 +30,7 @@ exports.handler = async function (event, context) {
 
     try {
         const response = await openai.post('/chat/completions', {
-            model: "gpt-4-32k",
+            model: "gpt-4",
             messages: messages
         });
         const assistantMessage = response.data.choices[0].message.content;
