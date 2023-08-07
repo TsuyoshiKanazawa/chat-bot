@@ -77,7 +77,7 @@ export default {
                     this.aiKindName = '女子高生のギャル';
                     break;
                 case 'cat':
-                    this.aiKindName = 'IQの高いねこ';
+                    this.aiKindName = '猫っぽい口調の人';
                     break;
                 default:
                     this.aiKindName = '';

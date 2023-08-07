@@ -122,6 +122,7 @@ textarea {
     display: flex;
     justify-content: flex-start;
     position: relative;
+    margin: 0;
 }
 
 .loading img {
