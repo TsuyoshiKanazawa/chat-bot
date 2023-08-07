@@ -13,7 +13,7 @@
             </div>
             <div v-if="isLoading" class="loading">
                 <img :src="require(`~/assets/images/${aiKind}.png`)" alt="Bot Image" />
-                <p>Loading...</p>
+                <div class="spinner"></div>
             </div>
         </div>
         <div id="input-area">
