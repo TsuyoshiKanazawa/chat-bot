@@ -10,9 +10,9 @@
                 <div v-else>
                     {{ message.content }}
                 </div>
-                <div v-if="isLoading" class="loading">
-                    Loading...
-                </div>
+            </div>
+            <div v-if="isLoading" class="loading">
+                Loading...
             </div>
         </div>
         <div id="input-area">
