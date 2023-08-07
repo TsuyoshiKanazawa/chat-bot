@@ -45,8 +45,7 @@ export default {
   ],
   
   axios: {
-    //baseURL: '/.netlify/functions'
-    baseURL: 'https://velvety-wisp-1cd5e2.netlify.app/.netlify/functions'
+    baseURL: '/.netlify/functions'
   },
 
   serverMiddleware: [
