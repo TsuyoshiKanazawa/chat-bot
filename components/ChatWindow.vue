@@ -127,6 +127,8 @@ export default {
                     this.isLoading = false;
                 }
             }
+
+            console.log(message)
         },
 
         
