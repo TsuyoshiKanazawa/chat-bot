@@ -10,6 +10,9 @@
                 <div v-else>
                     {{ message.content }}
                 </div>
+                <div v-if="isLoading" class="loading">
+                    Loading...
+                </div>
             </div>
         </div>
         <div id="input-area">
@@ -31,6 +34,7 @@ export default {
             messages: [],
             initialMessage: '',
             aiKindName: '',
+            isLoading: false,
         };
     },
     watch: {
@@ -113,10 +117,13 @@ export default {
                 this.input = '';
 
                 try {
+                    this.isLoading = true;
                     const res = await this.$axios.$post('/chat', { message });
                     this.messages.push({ content: res.message, sender: 'bot' });
                 } catch (error) {
                     console.error('Error in submit:', error);
+                } finally {
+                    this.isLoading = false;
                 }
             }
         },
