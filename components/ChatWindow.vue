@@ -132,13 +132,10 @@ export default {
         
         async initializeChat() {
             try {
-                this.isLoading = true;
                 const res = await this.$axios.$post('/chat', { message: this.initialMessage });
                 this.messages.push({ content: res.message, sender: 'bot' });
             } catch (error) {
                 console.error('Error in initializeChat:', error);
-            } finally {
-                this.isLoading = false;
             }
         },
 
