@@ -118,3 +118,14 @@ textarea {
     left: -50px;
 }
 
+.loading {
+    align-self: flex-start;
+    background-color: #fff;
+    width: fit-content;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 12px;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    position: relative;
+}
