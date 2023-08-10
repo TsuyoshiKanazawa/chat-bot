@@ -9,7 +9,7 @@ exports.handler = async function (event, context) {
     const userInput = JSON.parse(event.body).message;
 
     const openai = axios.create({
-        baseURL: 'https://api.openai.com/v1',
+        baseURL: 'https://scalar-test.openai.azure.com',
         headers: {
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ exports.handler = async function (event, context) {
     const messages = [...chatHistory];
 
     try {
-        const response = await openai.post('/chat/completions', {
+        const response = await openai.post('/openai/deployments/Scalar/chat/completions?api-version=2023-03-15-preview', {
             model: "gpt-3.5-turbo-16k",
             messages: messages
         });
