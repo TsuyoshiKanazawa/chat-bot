@@ -8,12 +8,11 @@ exports.handler = async function (event, context) {
 
     const userInput = JSON.parse(event.body).message;
 
-    const azureOpenai = axios.create({
-        baseURL: 'https://scalar-test.openai.azure.com/',
+    const openai = axios.create({
+        baseURL: 'https://api.openai.com/v1',
         headers: {
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             'Content-Type': 'application/json',
-            'OpenAI-API-Version': '2023-03-15-preview'
         },
     });
 
@@ -25,22 +24,18 @@ exports.handler = async function (event, context) {
     // チャット履歴を更新する
     chatHistory.push(userMessage);
 
-    console.log("User message:", userMessage);
+    console.log("User message:", userMessage); // 追加
 
     const messages = [...chatHistory];
 
     try {
-        const response = await azureOpenai.post('/v1/engines/Scalar/completions', {
-            messages: messages,
-            temperature: 0.7,
-            max_tokens: 800,
-            top_p: 0.95,
-            frequency_penalty: 0,
-            presence_penalty: 0
+        const response = await openai.post('/chat/completions', {
+            model: "gpt-3.5-turbo-16k",
+            messages: messages
         });
         const assistantMessage = response.data.choices[0].message.content;
 
-        console.log("Assistant message:", assistantMessage);
+        console.log("Assistant message:", assistantMessage); // 追加
 
         // ボットの応答をチャット履歴に追加
         const botMessage = {
