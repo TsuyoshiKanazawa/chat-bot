@@ -15,12 +15,20 @@ exports.handler = async function (event, context) {
 
     try {
         const result = await client.getChatCompletions(deploymentId, messages);
+
+        // ログにendpointとdeploymentIdを出力
+        console.log("Endpoint:", endpoint);
+        console.log("Deployment ID:", deploymentId);
+
         return {
             statusCode: 200,
             body: JSON.stringify(result)
         };
     } catch (err) {
-        console.error(err);  // サーバーのログにエラー詳細を出力
+        console.error("Error in getChatCompletions:", err.message);
+        console.error("Endpoint:", endpoint);
+        console.error("Deployment ID:", deploymentId);
+
         return {
             statusCode: 500,
             body: JSON.stringify({ error: err.message, stack: err.stack })
