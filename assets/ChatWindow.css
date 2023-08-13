@@ -51,6 +51,18 @@
     padding: 5em;
 }
 
+#chat-history::-webkit-scrollbar {
+    width: 10px;
+}
+
+#chat-history::-webkit-scrollbar-track {
+    background-color: #ccc;
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+    background-color: #17585d;
+}
+
 #chat-history img {
     width: 40px;
 }

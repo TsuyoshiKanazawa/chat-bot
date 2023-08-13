@@ -5,10 +5,10 @@
             <div v-for="(message, index) in messages" :key="index" :class="message.sender">
                 <div v-if="message.sender === 'bot'">
                     <img :src="require(`~/assets/images/${aiKind}.png`)" alt="Bot Image" />
-                    {{ message.content }}
+                    <div class="message-content">{{ message.content }}</div>
                 </div>
                 <div v-else>
-                    {{ message.content }}
+                    <div class="message-content">{{ message.content }}</div>
                 </div>
             </div>
             <div v-if="isLoading" class="loading">
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div id="input-area">
-            <textarea ref="myTextarea" v-model="input" ></textarea>
+            <textarea placeholder="shift+enterで送信" ref="myTextarea" v-model="input" @keydown="handleKeydown"></textarea>
             <button @click="submit">
                 <img src="~/assets/images/submitButton.png"/>
             </button>
@@ -60,6 +60,17 @@ export default {
         this.initializeChat();
     },
     methods: {
+        handleKeydown(event) {
+            if (event.shiftKey && event.keyCode === 13) {
+                // Shift + Enterが押されたとき
+                this.submit();
+                event.preventDefault();  // デフォルトの動作をキャンセル
+            } else if (event.keyCode === 13) {
+                // Enterのみが押されたとき
+                event.preventDefault();  // デフォルトの動作をキャンセル
+                this.input += '\n';  // 改行を追加
+            }
+        },
         async close() {
             try {
                 this.messages = [];
@@ -140,8 +151,6 @@ export default {
                 this.isLoading = false;
             }
         },
-
-
     },
     beforeDestroy() {
         this.messages = [];
@@ -150,3 +159,9 @@ export default {
 
 </script>
 
+<style scoped>
+.message-content {
+    white-space: pre-line;
+    /* 改行と空白を保持する */
+}
+</style>
