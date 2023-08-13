@@ -2,8 +2,8 @@
     <div id="chat">
         <button class="closeChat" @click="close"></button>
         <div id="chat-history">
-            <div v-for="(message, index) in messages" :key="index" :class="message.sender">
-                <div v-if="message.sender === 'bot'">
+            <div v-for="(message, index) in messages" :key="index" :class="message.role">
+                <div v-if="message.role === 'assistant'">
                     <img :src="require(`~/assets/images/${aiKind}.png`)" alt="Bot Image" />
                     {{ message.content }}
                 </div>
@@ -17,9 +17,9 @@
             </div>
         </div>
         <div id="input-area">
-            <textarea ref="myTextarea" v-model="input" ></textarea>
+            <textarea ref="myTextarea" v-model="input"></textarea>
             <button @click="submit">
-                <img src="~/assets/images/submitButton.png"/>
+                <img src="~/assets/images/submitButton.png" />
             </button>
         </div>
     </div>
@@ -28,7 +28,7 @@
 <script>
 export default {
     props: ['aiKind', 'name', 'job', 'business', 'company'],
-    
+
     data() {
         return {
             input: '',
@@ -55,10 +55,11 @@ export default {
             this.setInitialMessage();
         }
     },
-    mounted() {
+    async mounted() {
         this.setInitialMessage();
-        this.initializeChat();
+        await this.sendMessageToAI(this.initialMessage);
     },
+
     methods: {
         async close() {
             try {
@@ -114,35 +115,63 @@ export default {
             const message = this.input;
 
             if (message.trim() !== '') {
-                this.messages.push({ content: message, sender: 'user' });
+                this.messages.push({ content: message, role: 'user' });
                 this.input = '';
 
                 try {
                     this.isLoading = true;
-                    const res = await this.$axios.$post('/chat', { message });
-                    this.messages.push({ content: res.message, sender: 'bot' });
+                    const response = await fetch("/.netlify/functions/chat__", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ messages: this.messages })
+                    });
+
+                    const result = await response.json();
+                    console.log("API Response:", result);  // APIレスポンスをコンソールに表示
+
+                    if (result.choices && result.choices.length > 0) {
+                        this.messages.push({
+                            content: result.choices[0].message.content,
+                            role: 'assistant'
+                        });
+                    }
                 } catch (error) {
                     console.error('Error in submit:', error);
                 } finally {
                     this.isLoading = false;
                 }
             }
-
         },
-        async initializeChat() {
+        async sendMessageToAI(message) {
             try {
                 this.isLoading = true;
-                const res = await this.$axios.$post('/chat', { message: this.initialMessage });
-                this.messages.push({ content: res.message, sender: 'bot' });
+                const response = await fetch("/.netlify/functions/chat__", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ messages: [{ content: message, role: 'user' }] }) // initialMessageを使用してAPIを呼び出します
+                });
+
+                const result = await response.json();
+                console.log("API Response:", result);
+
+                if (result.choices && result.choices.length > 0) {
+                    this.messages.push({
+                        content: result.choices[0].message.content,
+                        role: 'assistant'
+                    });
+                }
             } catch (error) {
-                console.error('Error in initializeChat:', error);
+                console.error('Error in sendMessageToAI:', error);
             } finally {
                 this.isLoading = false;
             }
         },
-
-
     },
+
     beforeDestroy() {
         this.messages = [];
     },

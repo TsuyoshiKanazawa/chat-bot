@@ -30,7 +30,7 @@ exports.handler = async function (event, context) {
 
     try {
         const response = await openai.post('/chat/completions', {
-            model: "gpt-3.5-turbo-16k",
+            model: "gpt-3.5-turbo",
             messages: messages
         });
         const assistantMessage = response.data.choices[0].message.content;
@@ -56,4 +56,3 @@ exports.handler = async function (event, context) {
         };
     }
 };
-
