@@ -2,6 +2,7 @@
 
   <div>
     <Header />
+    <a href="/">openAI版</a>
     <div class="section">
       <div class="title">
         <img src="~/assets/images/number1.jpg">

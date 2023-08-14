@@ -5,10 +5,10 @@ exports.handler = async function (event, context) {
         return { statusCode: 405, body: "Method Not Allowed" };
     }
 
-    const { messages } = JSON.parse(event.body);
+    const { messages } = JSON.parse(event.body); //プロンプトを格納
 
     const endpoint = "https://scalar-test.openai.azure.com/";
-    const azureApiKey = `${process.env.AZURE_OPENAI_API_KEY}`; // 本番環境では環境変数などに隠蔽することをおすすめします。
+    const azureApiKey = `${process.env.AZURE_OPENAI_API_KEY}`; 
 
     const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
     const deploymentId = "Scalar";
@@ -19,6 +19,8 @@ exports.handler = async function (event, context) {
         // ログにendpointとdeploymentIdを出力
         console.log("Endpoint:", endpoint);
         console.log("Deployment ID:", deploymentId);
+        console.log("チャット履歴:", messages);
+        console.log("APIレスポンス:", result.choices[0].message);
 
         return {
             statusCode: 200,
@@ -31,7 +33,7 @@ exports.handler = async function (event, context) {
 
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: err.message, stack: err.stack })
+            body: JSON.stringify({ error: err.message || "Unknown error", stack: err.stack, receivedData: messages })
         };
     }
 };

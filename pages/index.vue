@@ -2,6 +2,8 @@
 
   <div>
     <Header />
+    <a href="/Azure">Azure版</a>
+
     <div class="section">
       <div class="title">
         <img src="~/assets/images/number1.jpg">

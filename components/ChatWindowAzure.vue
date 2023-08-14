@@ -158,12 +158,16 @@ export default {
         async sendMessageToAI(message) {
             try {
                 this.isLoading = true;
+
+                // 初回のメッセージをチャット履歴に追加しつつ、送信するメッセージを組み立てる
+                const messagesToSend = [...this.messages, { content: message, role: 'user' }];
+
                 const response = await fetch("/.netlify/functions/chat__", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ messages: [{ content: message, role: 'user' }] }) // initialMessageを使用してAPIを呼び出します
+                    body: JSON.stringify({ messages: messagesToSend }) // 組み立てたメッセージをAPIへ送信
                 });
 
                 const result = await response.json();
