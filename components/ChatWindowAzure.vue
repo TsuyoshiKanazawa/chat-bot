@@ -73,7 +73,7 @@ export default {
             }
         },
         async close() {
-            try {
+            try { //閉じるボタンを押したとき
                 this.messages = [];
                 this.$emit('closeComponent');
             } catch (error) {
@@ -130,7 +130,7 @@ export default {
                 this.input = '';
 
                 try {
-                    this.isLoading = true;
+                    this.isLoading = true; //ローディングのための状態管理
                     const response = await fetch("/.netlify/functions/chat__", {
                         method: "POST",
                         headers: {
@@ -151,15 +151,15 @@ export default {
                 } catch (error) {
                     console.error('Error in submit:', error);
                 } finally {
-                    this.isLoading = false;
+                    this.isLoading = false; //ローディングのための状態管理
                 }
             }
         },
         async sendMessageToAI(message) {
             try {
-                this.isLoading = true;
+                this.isLoading = true; //ローディングのための状態管理
 
-                // 初回のメッセージをチャット履歴に追加しつつ、送信するメッセージを組み立てる
+                //初回のメッセージをチャット履歴に追加しつつ、送信するメッセージを組み立てる
                 const messagesToSend = [...this.messages, { content: message, role: 'user' }];
 
                 const response = await fetch("/.netlify/functions/chat__", {
@@ -167,12 +167,13 @@ export default {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ messages: messagesToSend }) // 組み立てたメッセージをAPIへ送信
+                    body: JSON.stringify({ messages: messagesToSend }) //組み立てたメッセージをAPIへ送信
                 });
 
-                const result = await response.json();
-                console.log("API Response:", result);
+                const result = await response.json(); //APIレスポンスを格納
+                console.log("API Response:", result); //APIレスポンスを表示
 
+                //APIレスポンスをチャット履歴へ追加
                 if (result.choices && result.choices.length > 0) {
                     this.messages.push({
                         content: result.choices[0].message.content,
@@ -182,7 +183,7 @@ export default {
             } catch (error) {
                 console.error('Error in sendMessageToAI:', error);
             } finally {
-                this.isLoading = false;
+                this.isLoading = false; //ローディングのための状態管理
             }
         },
     },
