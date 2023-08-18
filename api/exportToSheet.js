@@ -55,7 +55,7 @@ exports.handler = async (event, context) => {
     // (以下は仮のデータです)
     const data = [['test']];
     const spreadsheetId = '1PNZt48JtYPQKd56nxrW1ACG_Xhni9yE2nQwN93kgxlM';
-    const range = 'Sheet1!A1';
+    const range = 'Sheet1';
 
     try {
         const response = await exportToSheet(data, spreadsheetId, range);
