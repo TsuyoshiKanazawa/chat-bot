@@ -62,6 +62,7 @@ export default {
     data() {
         return {
             chatMessages: [], // チャットの履歴を保持するための配列
+            spreadMessages: [], // スプレッドシートへ記載用の配列
             newMessage: '', // 新しいメッセージの入力値を保持する
             isStarted: false, // チャットが開始されたかどうかを示すフラグ
             tone: '', // AIの口調
@@ -81,6 +82,12 @@ export default {
 
             // ユーザーのメッセージを追加
             this.chatMessages.push({
+                id: Date.now(),
+                sender: 'user',
+                content: this.newMessage,
+            });
+            // spreadシート用
+            this.spreadMessages.push({
                 id: Date.now(),
                 sender: 'user',
                 content: this.newMessage,
@@ -108,6 +115,12 @@ export default {
 
                 // APIのレスポンスをチャットの履歴に追加
                 this.chatMessages.push({
+                    id: Date.now() + 1, // 一意のIDとして時間+1を使用
+                    sender: 'assistant',
+                    content: result.choices[0].message.content,
+                });
+                // spreadシート用
+                this.spreadMessages.push({
                     id: Date.now() + 1, // 一意のIDとして時間+1を使用
                     sender: 'assistant',
                     content: result.choices[0].message.content,
@@ -145,7 +158,7 @@ export default {
                                 #ロールプレイの概要\n
                                 私が自社の経営課題を見つけられるように、さまざまな質問をしたり、より詳しい質問をして、できるだけ多様な情報を引き出してください。ただし、質問は簡潔に、一度にひとつだけの質問をしてください。また、最初の質問は補助金の利用用途の背景にある課題を問うてください。 自社の経営課題を導くのに十分な情報が集まったと判断をしたら、申請書に記載する日本語で300文字程度の文章にまとめてください。ただし、まとめる前に私へ同意を求めてください。 ロールプレイが終了したら、まとめた自社の経営課題を==== start ====と==== end ====で括って提示してください。`;
 
-            // 「こんにちは」というメッセージを追加
+            //履歴に追加
             this.chatMessages.push({
                 id: Date.now(),
                 sender: 'user',
@@ -175,6 +188,12 @@ export default {
                 // APIのレスポンスをチャットの履歴に追加
                 this.chatMessages.push({
                     id: Date.now() + 1,
+                    sender: 'assistant',
+                    content: result.choices[0].message.content,
+                });
+                // spreadシート用
+                this.spreadMessages.push({
+                    id: Date.now() + 1, // 一意のIDとして時間+1を使用
                     sender: 'assistant',
                     content: result.choices[0].message.content,
                 });
@@ -211,7 +230,7 @@ export default {
         async exportToSheet() {
             try {
                 const response = await this.$axios.$post('/exportToSheet', {
-                    chatMessages: this.chatMessages
+                    spreadMessages: this.spreadMessages
                 });
                 if (response === 'Exported Successfully') {
                     // 成功した場合の処理をここに書く

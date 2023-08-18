@@ -50,10 +50,15 @@ async function exportToSheet(data, spreadsheetId, range) {
 }
 
 exports.handler = async (event, context) => {
-    // ここで適切なdata, spreadsheetId, rangeを取得します。
-    // 例えば、event.bodyからデータを取得するなど。
-    // (以下は仮のデータです)
-    const data = [['test']];
+    const requestBody = JSON.parse(event.body);
+    const spreadMessages = requestBody.spreadMessages;
+    // メッセージを1つの文字列に連結します
+    const concatenatedMessages = spreadMessages.map(msg => `[${msg.sender}] ${msg.content}`).join('\n');
+
+    const currentTime = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+
+    // A列には現在の時間、B列には連結したメッセージをセットします
+    const data = [[currentTime, concatenatedMessages]];
     const spreadsheetId = '1PNZt48JtYPQKd56nxrW1ACG_Xhni9yE2nQwN93kgxlM';
     const range = 'Sheet1';
 
