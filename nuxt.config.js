@@ -23,7 +23,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@/assets/main.css',
-    '@/assets/ChatWindow.css'
+    '@/assets/ChatWindow.css',
+    '@/assets/dev.css',
   ],
 
 
@@ -55,5 +56,13 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend(config, ctx) {
+      // 以下を追記
+      config.node = {
+        fs: 'empty',
+        googleapis: 'empty',
+        child_process: 'empty'
+      }
+    }
   },
 }

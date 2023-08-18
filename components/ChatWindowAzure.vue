@@ -1,8 +1,8 @@
 <template>
     <div id="chat">
         <button class="closeChat" @click="close"></button>
-        <div id="chat-history">
-            <div v-for="(message, index) in messages" :key="index" :class="message.role">
+        <div id="chat-history" ref="chatHistory">
+            <div v-for="(message, index) in messages" :key="index" :class="message.role" v-if="index !== 0">
                 <div v-if="message.role === 'assistant'">
                     <img :src="require(`~/assets/images/${aiKind}.png`)" alt="Bot Image" />
                     <div class="message-content">{{ message.content }}</div>
@@ -72,6 +72,12 @@ export default {
                 this.input += '\n';  // 改行を追加
             }
         },
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatContainer = this.$refs.chatHistory;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+        },
         async close() {
             try { //閉じるボタンを押したとき
                 this.messages = [];
@@ -83,7 +89,7 @@ export default {
         setInitialMessage() {
             switch (this.aiKind) {
                 case 'mama':
-                    this.aiKindName = '銀座スナックのママ';
+                    this.aiKindName = '銀座のスナックのママ';
                     break;
                 case 'gal':
                     this.aiKindName = '女子高生のギャル';
@@ -141,6 +147,8 @@ export default {
 
                     const result = await response.json();
                     console.log("API Response:", result);  // APIレスポンスをコンソールに表示
+                    console.log("履歴:", message); //履歴表示
+
 
                     if (result.choices && result.choices.length > 0) {
                         this.messages.push({
@@ -154,24 +162,26 @@ export default {
                     this.isLoading = false; //ローディングのための状態管理
                 }
             }
+            this.scrollToBottom();
         },
         async sendMessageToAI(message) {
             try {
                 this.isLoading = true; //ローディングのための状態管理
 
-                //初回のメッセージをチャット履歴に追加しつつ、送信するメッセージを組み立てる
-                const messagesToSend = [...this.messages, { content: message, role: 'user' }];
+                // 新しいメッセージをチャット履歴に直接追加
+                this.messages.push({ content: message, role: 'user' });
 
                 const response = await fetch("/.netlify/functions/chat__", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ messages: messagesToSend }) //組み立てたメッセージをAPIへ送信
+                    body: JSON.stringify({ messages: this.messages }) // 現在のthis.messagesをapi/chat__.jsへ送信
                 });
 
                 const result = await response.json(); //APIレスポンスを格納
                 console.log("API Response:", result); //APIレスポンスを表示
+                console.log("履歴:", message); //履歴表示
 
                 //APIレスポンスをチャット履歴へ追加
                 if (result.choices && result.choices.length > 0) {
@@ -185,7 +195,9 @@ export default {
             } finally {
                 this.isLoading = false; //ローディングのための状態管理
             }
+            this.scrollToBottom();
         },
+
     },
 
     beforeDestroy() {

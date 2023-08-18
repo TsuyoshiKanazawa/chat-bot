@@ -11,16 +11,16 @@ exports.handler = async function (event, context) {
     const azureApiKey = `${process.env.AZURE_OPENAI_API_KEY}`; 
 
     const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
-    const deploymentId = "Scalar";
+    const deploymentId = "gpt-4";
 
     try {
-        const result = await client.getChatCompletions(deploymentId, messages);
+        const result = await client.getChatCompletions(deploymentId, messages, MaxTokens = 50);
 
         // ログにendpointとdeploymentIdを出力
         console.log("Endpoint:", endpoint);
         console.log("Deployment ID:", deploymentId);
         console.log("チャット履歴:", messages);
-        console.log("APIレスポンス:", result.choices[0].message);
+        //console.log("APIレスポンス:", result.choices[0].message);
 
         return {
             statusCode: 200,
