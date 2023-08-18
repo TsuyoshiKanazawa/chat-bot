@@ -49,4 +49,25 @@ async function exportToSheet(data, spreadsheetId, range) {
     return response.data;
 }
 
-module.exports = exportToSheet;
+exports.handler = async (event, context) => {
+    // ここで適切なdata, spreadsheetId, rangeを取得します。
+    // 例えば、event.bodyからデータを取得するなど。
+    // (以下は仮のデータです)
+    const data = [['test']];
+    const spreadsheetId = '1PNZt48JtYPQKd56nxrW1ACG_Xhni9yE2nQwN93kgxlM';
+    const range = 'Sheet1!A1';
+
+    try {
+        const response = await exportToSheet(data, spreadsheetId, range);
+        return {
+            statusCode: 200,
+            body: JSON.stringify(response)
+        };
+    } catch (error) {
+        console.error("Error exporting to sheet:", error);
+        return {
+            statusCode: 500,
+            body: "Failed to export data to sheet."
+        };
+    }
+};
