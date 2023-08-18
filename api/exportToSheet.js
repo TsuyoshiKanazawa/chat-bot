@@ -15,7 +15,7 @@ const googleCredentials = {
 };
 
 const sheets = google.sheets({ version: 'v4' });
-
+console.log('GOOGLE_PRIVATE_KEY exists:', Boolean(process.env.GOOGLE_PRIVATE_KEY));
 /**
  * Google Sheetsにデータをエクスポートする関数
  * @param {Array} data - エクスポートするデータ。2次元配列を期待。
