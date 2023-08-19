@@ -74,7 +74,7 @@
 }
 
 .devChat {
-    width: 1440px;
+    width: 1460px;
     margin: auto;
     display: flex;
     justify-content: space-between;
@@ -101,34 +101,79 @@
     margin-top: 10px;
 }
 
+.devSection .prompt03 {
+    font-size: 8px;
+    font-weight: 700;
+    margin-top: 5px;
+}
+
 .devSection input {
     margin-left: 15px;
-    width: 600px;
+    width: 615px;
     height: 18px;
     border: none;
     background-color: #F6F6F6;
     font-size: 8px;
     font-weight: 400;
+    letter-spacing: 0.1em;
     padding: 0 5px;
     box-sizing: border-box;
 }
 
+.devSection input::placeholder {
+    font-size: 8px;
+    font-weight: 400;
+    color: #5F6368;
+    letter-spacing: 0.1em;
+}
+
 .devSection .usage {
-    width: 600px;
+    width: 615px;
     height: 50px;
     background-color: #F6F6F6;
     border-radius: 0;
     margin: 0;
     margin-left: 15px;
     font-size: 8px;
+    letter-spacing: 0.1em;
     padding: 5px;
     box-sizing: border-box;
+}
+
+.devSection .usage::placeholder {
+    font-size: 8px;
+    font-weight: 400;
+    color: #5F6368;
+    letter-spacing: 0.1em;
+}
+
+.devSection .usage03 {
+    width: 615px;
+    height: 70px;
+    background-color: #F6F6F6;
+    border-radius: 0;
+    margin: 0;
+    margin-left: 15px;
+    margin-top: 10px;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.devSection .usage03::placeholder {
+    font-size: 8px;
+    font-weight: 400;
+    color: #5F6368;
+    letter-spacing: 0.1em;
 }
 
 .buttonContainer {
     display: flex;
     justify-content: flex-end;
     gap: 5px;
+    margin-top: 25px;
 }
 
 .setting .default {
@@ -154,8 +199,19 @@
     opacity: 0.5;
 }
 
-.setting .resetButton {
+.buttonContainer .resetButton {
     width: 100px;
+    height: 18px;
+    background-color: #a7a7a7;
+    border: none;
+    border-radius: 9px;
+    color: white;
+    font-size: 8px;
+    cursor: pointer;
+}
+
+.buttonContainer .spreadButton {
+    width: 120px;
     height: 18px;
     background-color: #a7a7a7;
     border: none;
@@ -167,34 +223,75 @@
 
 .chatView {
     background-color: #E3F0FE;
-    width: 750px;
-    height: 750px;
+    width: 720px;
+    height: 600px;
     position: relative;
-    padding-top: 30px;
-    padding-left: 30px;
-    padding-right: 30px;
-    box-sizing: border-box;
+    padding: 30px;
+    white-space: pre-line;
+    overflow-y: scroll;
 }
 
-.chatView .chatInput {
-    width: 750px;
+.chatView::-webkit-scrollbar {
+    width: 20px;
+}
+
+.chatView::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.chatView::-webkit-scrollbar-thumb {
+    background-color: #5F6368;
+    border-radius: 9px;
+    border-right: 8px solid transparent;
+    /* 透明なボーダーをつける */
+    border-left: 8px solid transparent;
+    /* 透明なボーダーをつける */
+    background-clip: padding-box;
+    /* 背景を切り取る */
+}
+
+.chatInput {
+    width: 780px;
     height: 100px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     background-color: #1C7EED;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    gap: 20px;
 }
 
-.chatView .chatInput textarea {
-    width: 700px;
+.chatInput textarea {
+    width: 730px;
     height: 80px;
     border-radius: 0;
-    margin: auto 0px auto 5px;
+    margin: auto 0px auto 10px;
+    overflow-y: scroll;
+    padding-right: 10px;
 }
 
-.chatView .chatInput button {
+.chatInput textarea::-webkit-scrollbar {
+    width: 12px;
+}
+
+.chatInput textarea::-webkit-scrollbar-track {
+    background-color: white;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.chatInput textarea::-webkit-scrollbar-thumb {
+    background-color: #5F6368;
+    border-radius: 5px;
+    border-right: 4px solid transparent;
+    /* 透明なボーダーをつける */
+    border-left: 4px solid transparent;
+    /* 透明なボーダーをつける */
+    background-clip: padding-box;
+    /* 背景を切り取る */
+}
+
+.chatInput button {
     width: 20px;
     height: 20px;
     background: none;
@@ -203,24 +300,33 @@
     margin-top: auto;
     margin-bottom: 10px;
     position: relative;
+    transition: 0.2s;
 }
 
-.chatView .chatInput button img {
+.chatInput button:hover {
+    transform: translateX(2px);
+}
+
+.chatInput button img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.chatView .message {
+.message {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 20px;
 }
 
-.chatView .message.user {
+.message.user {
     background-color: #1C7EED;
     color: white;
+}
+
+.message.user:first-child {
+    display: none;
 }
 
 .message.assistant {

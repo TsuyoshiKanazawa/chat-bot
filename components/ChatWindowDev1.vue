@@ -29,27 +29,30 @@
             </div>
 
             <div class="buttonContainer">
-                <button @click="exportToSheet">チャット履歴を保存</button>
-                <button @click="resetChat" class="resetButton">CHAT RESET</button>
-                <button @click="startChat" :disabled="isStarted" :class="buttonClass">START</button>
+                <button @click="exportToSheet" class="spreadButton">チャット履歴を保存</button>
+                <button @click="resetChat" class="resetButton" :disabled="isLoading">CHAT RESET</button>
+                <button @click="startChat" 
+                    :disabled="isStartDisabled" 
+                    :class="[buttonClass, { 'disabled': isStartDisabled }]">START</button>
             </div>
             
             
         </div>
 
-        <div class="chatView">
-            <!-- チャットメッセージの表示部分 -->
-            <div v-for="message in chatMessages" :key="message.id" :class="`message ${message.sender}`">
-                <img v-if="message.sender === 'assistant'" src="~/assets/images/iconScalar.png" alt="AI Icon" class="ai-icon">
-                {{ message.content }}
+        <div class="chatContainer">
+            <div class="chatView">
+                <!-- チャットメッセージの表示部分 -->
+                <div v-for="message in chatMessages" :key="message.id" :class="`message ${message.sender}`">
+                    <img v-if="message.sender === 'assistant'" src="~/assets/images/iconScalar.png" alt="AI Icon" class="ai-icon">{{ message.content }}
+                </div>
+                <div v-if="isLoading" class="loading">
+                    <img src="~/assets/images/iconScalar.png" alt="AI Icon" class="ai-icon">
+                    <p>{{ loadingDots }}</p>
+                </div>
+                <!-- チャット入力部分 -->
             </div>
-            <div v-if="isLoading" class="loading">
-                <img src="~/assets/images/iconScalar.png" alt="AI Icon" class="ai-icon">
-                <p>{{ loadingDots }}</p>
-            </div>
-            <!-- チャット入力部分 -->
             <div class="chatInput">
-                <textarea v-model="newMessage" placeholder="メッセージを入力してください"></textarea>
+                <textarea v-model="newMessage" @keyup.shift.enter="sendMessage" placeholder="Write to text..."></textarea>
                 <button @click="sendMessage"><img src="~/assets/images/submitButton.png" /></button>
             </div>
         </div>
@@ -78,6 +81,8 @@ export default {
     },
     methods: {
         async sendMessage() {
+            this.newMessage = this.newMessage.replace(/^\s*\n+|\n+\s*$/g, '');
+
             if (!this.newMessage.trim()) return; // 空のメッセージは送信しない
 
             // ユーザーのメッセージを追加
@@ -103,6 +108,7 @@ export default {
             this.startLoadingAnimation();
 
             try {
+                this.newMessage = ''; // 入力をリセット
                 // APIを呼び出し
                 const response = await fetch('/.netlify/functions/chat__', {
                     method: 'POST',
@@ -126,7 +132,7 @@ export default {
                     content: result.choices[0].message.content,
                 });
 
-                this.newMessage = ''; // 入力をリセット
+                
                 this.stopLoadingAnimation();//ローディングを終了
             } catch (error) {
                 console.error('APIエラー:', error);
@@ -137,25 +143,25 @@ export default {
             this.isStarted = true;  // チャットを開始したとマーク
             this.buttonClass = 'disabled';  // 追加: ボタンのクラスを変更
 
-            let initialMessage = `これから以下の条件に沿って、ロールプレイをします。\n
-                                指示について理解ができたら、いきなり私への挨拶と最初の質問から開始してください。\n
+            let initialMessage = `これから以下の条件に沿って、ロールプレイをします。
+                                指示について理解ができたら、いきなり私への挨拶と最初の質問から開始してください。
 
-                                #あなたのロール\n
-                                [名前]ScalarAI\n
-                                [職業]経営コンサルタント\n
-                                [口調]${this.tone}\n
-                                \n
-                                #私のロール\n
-                                [名前]${this.name}\n
-                                [役職]${this.position}\n
-                                [所属企業名]${this.company}\n
-                                [経営事業]${this.businessContent}\n
-                                [補助金の利用用途]${this.subsidyUsage}\n
-                                \n
-                                #ロールプレイの目的\n
-                                私は小規模事業者持続化補助金の申請を予定しており、申請書に記載する自社の経営課題を見つけたいです。経営課題と補助金の利用用途は合理的である必要があります。また、経営課題は定量的な根拠やエピソードを含む具体的な内容が必要です。さらに、経営課題の解決が補助金の利用用途と一致しており、実現によって得られる効果についても含む必要があります。\n
-                                \n
-                                #ロールプレイの概要\n
+                                #あなたのロール
+                                [名前]ScalarAI
+                                [職業]経営コンサルタント
+                                [口調]${this.tone}
+                                
+                                #私のロール
+                                [名前]${this.name}
+                                [役職]${this.position}
+                                [所属企業名]${this.company}
+                                [経営事業]${this.businessContent}
+                                [補助金の利用用途]${this.subsidyUsage}
+                                
+                                #ロールプレイの目的
+                                私は小規模事業者持続化補助金の申請を予定しており、申請書に記載する自社の経営課題を見つけたいです。経営課題と補助金の利用用途は合理的である必要があります。また、経営課題は定量的な根拠やエピソードを含む具体的な内容が必要です。さらに、経営課題の解決が補助金の利用用途と一致しており、実現によって得られる効果についても含む必要があります。
+                                
+                                #ロールプレイの概要
                                 私が自社の経営課題を見つけられるように、さまざまな質問をしたり、より詳しい質問をして、できるだけ多様な情報を引き出してください。ただし、質問は簡潔に、一度にひとつだけの質問をしてください。また、最初の質問は補助金の利用用途の背景にある課題を問うてください。 自社の経営課題を導くのに十分な情報が集まったと判断をしたら、申請書に記載する日本語で300文字程度の文章にまとめてください。ただし、まとめる前に私へ同意を求めてください。 ロールプレイが終了したら、まとめた自社の経営課題を==== start ====と==== end ====で括って提示してください。`;
 
             //履歴に追加
@@ -223,6 +229,10 @@ export default {
             this.isLoading = false;
         },
         resetChat() {
+            // isLoadingがtrueの場合は関数を終了
+            if (this.isLoading) {
+                return;
+            }
             this.chatMessages = [];
             this.isStarted = false;
             this.buttonClass = 'default';
@@ -230,7 +240,8 @@ export default {
         async exportToSheet() {
             try {
                 const response = await this.$axios.$post('/exportToSheet', {
-                    spreadMessages: this.spreadMessages
+                    spreadMessages: this.spreadMessages,
+                    kinds:"01_経営課題のヒアリング機能",
                 });
                 if (response === 'Exported Successfully') {
                     // 成功した場合の処理をここに書く
@@ -240,17 +251,19 @@ export default {
             }
         }
     },
+    computed: {
+        // 必須入力欄が全て入力されているか確認するcomputedプロパティ
+        isStartDisabled() {
+            // 必須入力欄が一つでも空の場合、trueを返す（ボタンを無効化）
+            return this.isStarted || !this.name || !this.position || !this.company || !this.businessContent || !this.subsidyUsage;
+        },
+    },
+
 };
 </script>
 
 </script>
 
 <style scoped>
-.loading {
-    text-align: center;
-    font-size: 24px;
-    padding: 10px;
-    /* その他のスタイルを必要に応じて追加 */
-}
 
 </style>

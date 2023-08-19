@@ -5,6 +5,10 @@ body {
     margin: 0;
 }
 
+input, textarea {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
 .header {
     background: linear-gradient(90deg,#36D1DC, #5B86E5);
     width: 100%;

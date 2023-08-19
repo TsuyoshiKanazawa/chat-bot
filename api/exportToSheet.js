@@ -52,6 +52,7 @@ async function exportToSheet(data, spreadsheetId, range) {
 exports.handler = async (event, context) => {
     const requestBody = JSON.parse(event.body);
     const spreadMessages = requestBody.spreadMessages;
+    const kinds = requestBody.kinds;
     // メッセージを1つの文字列に連結します
     const concatenatedMessages = spreadMessages.map(msg => `[${msg.sender}] ${msg.content}`).join('\n');
 
@@ -60,7 +61,7 @@ exports.handler = async (event, context) => {
     // A列には現在の時間、B列には連結したメッセージをセットします
     const data = [[currentTime, concatenatedMessages]];
     const spreadsheetId = '1PNZt48JtYPQKd56nxrW1ACG_Xhni9yE2nQwN93kgxlM';
-    const range = 'Sheet1';
+    const range = kinds;
 
     try {
         const response = await exportToSheet(data, spreadsheetId, range);
