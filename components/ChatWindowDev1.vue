@@ -40,7 +40,7 @@
         </div>
 
         <div class="chatContainer">
-            <div class="chatView">
+            <div class="chatView" ref="chatView">
                 <!-- チャットメッセージの表示部分 -->
                 <div v-for="message in chatMessages" :key="message.id" :class="`message ${message.sender}`">
                     <img v-if="message.sender === 'assistant'" src="~/assets/images/iconScalar.png" alt="AI Icon" class="ai-icon">{{ message.content }}
@@ -80,9 +80,15 @@ export default {
         };
     },
     methods: {
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatContainer = this.$refs.chatView;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+        },
         async sendMessage() {
             this.newMessage = this.newMessage.replace(/^\s*\n+|\n+\s*$/g, '');
-
+            this.scrollToBottom();
             if (!this.newMessage.trim()) return; // 空のメッセージは送信しない
 
             // ユーザーのメッセージを追加
@@ -134,10 +140,12 @@ export default {
 
                 
                 this.stopLoadingAnimation();//ローディングを終了
+                
             } catch (error) {
                 console.error('APIエラー:', error);
                 this.stopLoadingAnimation();//ローディングを停止
             }
+            this.scrollToBottom();
         },
         async startChat() {
             this.isStarted = true;  // チャットを開始したとマーク

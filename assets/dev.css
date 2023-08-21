@@ -323,6 +323,8 @@
 .message.user {
     background-color: #1C7EED;
     color: white;
+    max-width: 660px;
+    box-sizing: border-box;
 }
 
 .message.user:first-child {
