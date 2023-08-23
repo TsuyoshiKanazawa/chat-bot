@@ -29,7 +29,6 @@
     "vue-template-compiler": "^2.7.10"
   },
   "devDependencies": {
-    "cypress": "^12.17.4",
     "node-sass": "^9.0.0"
   }
 }
