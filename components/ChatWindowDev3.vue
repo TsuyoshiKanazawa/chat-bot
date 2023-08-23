@@ -38,8 +38,11 @@
                 <!-- チャット入力部分 -->
             </div>
             <div class="chatInput">
-                <textarea v-model="newMessage" @keyup.shift.enter="sendMessage" placeholder="Write to text..."></textarea>
-                <button @click="sendMessage"><img src="~/assets/images/submitButton.png" /></button>
+                <textarea v-model="newMessage" @keyup.shift.enter="sendMessage" placeholder="writing to text..."
+                    :disabled="isInputDisabled" class="inputArea" id="chatInput"></textarea>
+                <button @click="sendMessage">
+                    <img src="~/assets/images/submitButton.png" />
+                </button>
             </div>
         </div>
     </div>
@@ -60,10 +63,20 @@ export default {
             buttonClass: 'default',
         };
     },
+    mounted() {
+        // 初期状態でチャット入力を無効にする
+        this.isInputDisabled = true;
+    },
     methods: {
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatContainer = this.$refs.chatView;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+        },
         async sendMessage() {
             this.newMessage = this.newMessage.replace(/^\s*\n+|\n+\s*$/g, '');
-
+            this.scrollToBottom();
             if (!this.newMessage.trim()) return; // 空のメッセージは送信しない
 
             // ユーザーのメッセージを追加
@@ -115,10 +128,13 @@ export default {
 
 
                 this.stopLoadingAnimation();//ローディングを終了
+
             } catch (error) {
                 console.error('APIエラー:', error);
                 this.stopLoadingAnimation();//ローディングを停止
             }
+            this.scrollToBottom();
+            this.checkForExportTrigger();
         },
         async startChat() {
             this.isStarted = true;  // チャットを開始したとマーク
@@ -128,18 +144,16 @@ export default {
 
                                 #あなたのロール
                                 経営コンサルタント
-
+                                
                                 #タスクの目的
                                 私は小規模事業者持続化補助金の申請を予定しており、申請書に記載する日本語で20文字以上30文字以内の事業タイトルを検討しています。
-
+                                
                                 #タスクの概要
                                 以下に記載する #補助事業の内容 を基に、日本語で20文字以上30文字以内の事業タイトルを考えてください。事業タイトルは、最後に「事業」と付く必要があります。また、事業タイトルは初めてみた人でもその概要がイメージしやすい、具体的でわかりやすいものである必要があります。事業タイトルが複数案考えられる場合は、一案に絞って提示してください。
-
+                                
                                 #補助事業の内容 
-                                今回、当社が主なターゲットとしている${this.target}
-                                に対して、より当社の商品・サービスの魅力を伝えていきたいと考えています。
-                                具体的な販路開拓の手段として、${this.means}
-                                以上の取り組みの経費の一部に対して、当補助金を活用したいと考えています。`;
+                                今回、当社が主なターゲットとしている${this.target}に対して、より当社の商品・サービスの魅力を伝えていきたいと考えています。具体的な販路開拓の手段として、${this.means}以上の取り組みの経費の一部に対して、当補助金を活用したいと考えています。`;
+
 
             //履歴に追加
             this.chatMessages.push({
@@ -182,6 +196,8 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
+                chatInput.disabled = false;
+
             } catch (error) {
                 console.error('APIエラー:', error);
 
@@ -218,13 +234,28 @@ export default {
             try {
                 const response = await this.$axios.$post('/exportToSheet', {
                     spreadMessages: this.spreadMessages,
-                    kinds: "03_事業タイトル(30文字以内)要約機能",
+                    kinds: "02_自社の強み・独自性のヒアリング機能",
                 });
                 if (response === 'Exported Successfully') {
                     // 成功した場合の処理をここに書く
                 }
             } catch (error) {
                 console.error('Error exporting to Google Sheets:', error);
+            }
+        },
+        checkForExportTrigger() {
+            const messagesContent = this.spreadMessages.map(m => m.content);
+            const concatenatedMessages = messagesContent.join(' ');
+
+            if (concatenatedMessages.includes('==== start ====') && concatenatedMessages.includes('==== end ====')) {
+                console.log("Triggering exportToSheet");
+                this.exportToSheet();
+
+                // chatInputをクリックできないようにする
+                chatInput.disabled = true;
+
+            } else {
+                console.log("Not triggering exportToSheet");
             }
         }
     },

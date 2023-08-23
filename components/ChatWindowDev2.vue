@@ -22,6 +22,7 @@
 
                 <p>▼事業内容（必須）</p>
                 <input v-model="businessContent" type="text" placeholder="例）中古車の買取・販売事業">
+
             </div>
 
             <div class="buttonContainer">
@@ -35,7 +36,7 @@
         </div>
 
         <div class="chatContainer">
-            <div class="chatView">
+            <div class="chatView" ref="chatView">
                 <!-- チャットメッセージの表示部分 -->
                 <div v-for="message in chatMessages" :key="message.id" :class="`message ${message.sender}`">
                     <img v-if="message.sender === 'assistant'" src="~/assets/images/iconScalar.png" alt="AI Icon"
@@ -48,8 +49,11 @@
                 <!-- チャット入力部分 -->
             </div>
             <div class="chatInput">
-                <textarea v-model="newMessage" @keyup.shift.enter="sendMessage" placeholder="Write to text..."></textarea>
-                <button @click="sendMessage"><img src="~/assets/images/submitButton.png" /></button>
+                <textarea v-model="newMessage" @keyup.shift.enter="sendMessage" placeholder="writing to text..."
+                    :disabled="isInputDisabled" class="inputArea" id="chatInput"></textarea>
+                <button @click="sendMessage">
+                    <img src="~/assets/images/submitButton.png" />
+                </button>
             </div>
         </div>
     </div>
@@ -71,12 +75,23 @@ export default {
             isLoading: false, // ローディング中かどうかを示すフラグ
             loadingDots: '',  // ローディング中の点の数
             buttonClass: 'default',
+            isInputDisabled: true,
         };
     },
+    mounted() {
+        // 初期状態でチャット入力を無効にする
+        this.isInputDisabled = true;
+    },
     methods: {
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatContainer = this.$refs.chatView;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+        },
         async sendMessage() {
             this.newMessage = this.newMessage.replace(/^\s*\n+|\n+\s*$/g, '');
-
+            this.scrollToBottom();
             if (!this.newMessage.trim()) return; // 空のメッセージは送信しない
 
             // ユーザーのメッセージを追加
@@ -128,34 +143,38 @@ export default {
 
 
                 this.stopLoadingAnimation();//ローディングを終了
+
             } catch (error) {
                 console.error('APIエラー:', error);
                 this.stopLoadingAnimation();//ローディングを停止
             }
+            this.scrollToBottom();
+            this.checkForExportTrigger();
         },
         async startChat() {
             this.isStarted = true;  // チャットを開始したとマーク
             this.buttonClass = 'disabled';  // 追加: ボタンのクラスを変更
 
-            let initialMessage = `これから以下の条件に沿って、ロールプレイをします。 
+            let initialMessage = `これから以下の条件に沿って、ロールプレイをします。
                                 指示について理解ができたら、いきなり私への挨拶と最初の質問から開始してください。
 
                                 #あなたのロール
                                 [名前]ScalarAI
                                 [職業]経営コンサルタント
                                 [口調]${this.tone}
-
+                                
                                 #私のロール
                                 [名前]${this.name}
                                 [役職]${this.position}
                                 [所属企業名]${this.company}
                                 [経営事業]${this.businessContent}
-
+                                
                                 #ロールプレイの目的
                                 私は小規模事業者持続化補助金の申請を予定しており、申請書に記載する自社の強み・独自性を見つけたいです。自社の強み・独自性は市場や競合と相関的に示されている必要があります。また、自社の強み・独自性は定量的な根拠やエピソードを含む具体的な内容が必要です。
-
+                                
                                 #ロールプレイの概要
-                                私が自社の強み・独自性を見つけられるように、さまざまな質問をしたり、より詳しい質問をして、できるだけ多様な情報を引き出してください。ただし、質問は簡潔に、一度にひとつだけの質問をしてください。 自社の強み・独自性を導くのに十分な情報が集まったと判断をしたら、申請書に記載する日本語で300文字程度の文章にまとめてください。ただし、まとめる前に私へ同意を求めてください。 ロールプレイが終了したら、まとめた自社の強み・独自性を==== start ====と==== end ====で括って提示してください。`;
+                                私が自社の強み・独自性を見つけられるように、さまざまな質問をしたり、より詳しい質問をして、できるだけ多様な情報を引き出してください。ただし、質問は簡潔に、一度にひとつだけの質問をしてください。 自社の強み・独自性を導くのに十分な情報が集まったと判断をしたら、申請書に記載する日本語で300文字程度の文章にまとめてください。また、まとめる文章の書きだしは「弊社では、」としてください。ただし、まとめる前に私へ同意を求めてください。 ロールプレイが終了したら、まとめた自社の強み・独自性を==== start ====と==== end ====で括って提示してください。`;
+
 
             //履歴に追加
             this.chatMessages.push({
@@ -198,6 +217,8 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
+                chatInput.disabled = false;
+
             } catch (error) {
                 console.error('APIエラー:', error);
 
@@ -241,6 +262,21 @@ export default {
                 }
             } catch (error) {
                 console.error('Error exporting to Google Sheets:', error);
+            }
+        },
+        checkForExportTrigger() {
+            const messagesContent = this.spreadMessages.map(m => m.content);
+            const concatenatedMessages = messagesContent.join(' ');
+
+            if (concatenatedMessages.includes('==== start ====') && concatenatedMessages.includes('==== end ====')) {
+                console.log("Triggering exportToSheet");
+                this.exportToSheet();
+
+                // chatInputをクリックできないようにする
+                chatInput.disabled = true;
+
+            } else {
+                console.log("Not triggering exportToSheet");
             }
         }
     },

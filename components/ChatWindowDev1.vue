@@ -52,8 +52,15 @@
                 <!-- チャット入力部分 -->
             </div>
             <div class="chatInput">
-                <textarea v-model="newMessage" @keyup.shift.enter="sendMessage" placeholder="Write to text..."></textarea>
-                <button @click="sendMessage"><img src="~/assets/images/submitButton.png" /></button>
+                <textarea v-model="newMessage" 
+                        @keyup.shift.enter="sendMessage"
+                        placeholder="writing to text..." 
+                        :disabled="isInputDisabled"
+                        class="inputArea"
+                        id="chatInput"></textarea>
+                <button @click="sendMessage">
+                <img src="~/assets/images/submitButton.png" />
+                </button>
             </div>
         </div>
     </div>
@@ -77,7 +84,12 @@ export default {
             isLoading: false, // ローディング中かどうかを示すフラグ
             loadingDots: '',  // ローディング中の点の数
             buttonClass: 'default',
+            isInputDisabled: true,
         };
+    },
+    mounted() {
+        // 初期状態でチャット入力を無効にする
+        this.isInputDisabled = true;
     },
     methods: {
         scrollToBottom() {
@@ -146,6 +158,7 @@ export default {
                 this.stopLoadingAnimation();//ローディングを停止
             }
             this.scrollToBottom();
+            this.checkForExportTrigger();
         },
         async startChat() {
             this.isStarted = true;  // チャットを開始したとマーク
@@ -214,6 +227,8 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
+                chatInput.disabled = false;
+
             } catch (error) {
                 console.error('APIエラー:', error);
                         
@@ -257,6 +272,21 @@ export default {
                 }
             } catch (error) {
                 console.error('Error exporting to Google Sheets:', error);
+            }
+        },
+        checkForExportTrigger() {
+            const messagesContent = this.spreadMessages.map(m => m.content);
+            const concatenatedMessages = messagesContent.join(' ');
+
+            if (concatenatedMessages.includes('==== start ====') && concatenatedMessages.includes('==== end ====')) {
+                console.log("Triggering exportToSheet");
+                this.exportToSheet();
+
+                // chatInputをクリックできないようにする
+                chatInput.disabled = true;
+
+            } else {
+                console.log("Not triggering exportToSheet");
             }
         }
     },
