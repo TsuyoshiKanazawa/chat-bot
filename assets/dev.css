@@ -78,7 +78,28 @@
     margin: auto;
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
+
+.error-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    background-color: #F6F6F6;
+    padding-top: 20px;
+    border: 2px solid #1C7EED;
+    border-radius: 10px;
+}
+
+.error-modal p {
+    color: #000;
+    font-size: 10px;
+}
+
 
 .setting {
     width: 615px;

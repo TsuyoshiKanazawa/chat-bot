@@ -45,6 +45,12 @@
                 </button>
             </div>
         </div>
+
+        <div v-if="showErrorModal" class="error-modal">
+            <p>サーバーとの通信に失敗しました。</p>
+            <p>もう一度送信してください。</p>
+            <button @click="closeErrorModal">OK</button>
+        </div>
     </div>
 </template>
 
@@ -61,6 +67,8 @@ export default {
             isLoading: false, // ローディング中かどうかを示すフラグ
             loadingDots: '',  // ローディング中の点の数
             buttonClass: 'default',
+            isInputDisabled: true,
+            showErrorModal: false, // エラーモーダルの表示状態
         };
     },
     mounted() {
@@ -131,7 +139,10 @@ export default {
 
             } catch (error) {
                 console.error('APIエラー:', error);
-                this.stopLoadingAnimation();//ローディングを停止
+                this.spreadMessages = previousSpreadMessages;
+                this.chatMessages = previousChatMessages; //エラーが発生した場合、chatMessagesを元の状態に戻す
+                this.stopLoadingAnimation(); //ローディングを停止
+                this.showErrorModal = true; // エラーモーダルを表示
             }
             this.scrollToBottom();
             this.checkForExportTrigger();
@@ -202,6 +213,10 @@ export default {
                 console.error('APIエラー:', error);
 
                 this.stopLoadingAnimation(); //ローディング終了
+                this.showErrorModal = true; // エラーモーダルを表示
+                this.isStarted = false;
+                this.buttonClass = 'default';  // STARTボタンのクラスを変更
+                this.chatMessages = [];
             }
         },
         startLoadingAnimation() {
@@ -229,6 +244,7 @@ export default {
             this.chatMessages = [];
             this.isStarted = false;
             this.buttonClass = 'default';
+            this.isInputDisabled = true;  // 入力欄を無効にする
         },
         async exportToSheet() {
             try {
@@ -257,7 +273,10 @@ export default {
             } else {
                 console.log("Not triggering exportToSheet");
             }
-        }
+        },
+        closeErrorModal() {
+            this.showErrorModal = false;
+        },
     },
     computed: {
         // 必須入力欄が全て入力されているか確認するcomputedプロパティ

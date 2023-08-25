@@ -63,6 +63,13 @@
                 </button>
             </div>
         </div>
+
+        <div v-if="showErrorModal" class="error-modal">
+            <p>サーバーとの通信に失敗しました。</p>
+            <p>もう一度送信してください。</p>
+            <button @click="closeErrorModal">OK</button>
+        </div>
+
     </div>
 
 </template>
@@ -85,6 +92,7 @@ export default {
             loadingDots: '',  // ローディング中の点の数
             buttonClass: 'default',
             isInputDisabled: true,
+            showErrorModal: false, // エラーモーダルの表示状態
         };
     },
     mounted() {
@@ -155,14 +163,17 @@ export default {
                 
             } catch (error) {
                 console.error('APIエラー:', error);
-                this.stopLoadingAnimation();//ローディングを停止
+                this.spreadMessages = previousSpreadMessages;
+                this.chatMessages = previousChatMessages; //エラーが発生した場合、chatMessagesを元の状態に戻す
+                this.stopLoadingAnimation(); //ローディングを停止
+                this.showErrorModal = true; // エラーモーダルを表示
             }
             this.scrollToBottom();
             this.checkForExportTrigger();
         },
         async startChat() {
             this.isStarted = true;  // チャットを開始したとマーク
-            this.buttonClass = 'disabled';  // 追加: ボタンのクラスを変更
+            this.buttonClass = 'disabled';  // STARTボタンのクラスを変更
 
             let initialMessage = `これから以下の条件に沿って、ロールプレイをします。
                                 指示について理解ができたら、いきなり私への挨拶と最初の質問から開始してください。
@@ -185,7 +196,6 @@ export default {
                                 #ロールプレイの概要
                                 私が自社の経営課題を見つけられるように、さまざまな質問をしたり、より詳しい質問をして、できるだけ多様な情報を引き出してください。ただし、質問は簡潔に、一度にひとつだけの質問をしてください。また、最初の質問は補助金の利用用途の背景にある課題を問うてください。 自社の経営課題を導くのに十分な情報が集まったと判断をしたら、申請書に記載する日本語で300文字程度の文章にまとめてください。また、まとめる文章の書きだしは「弊社では、」としてください。ただし、まとめる前に私へ同意を求めてください。 ロールプレイが終了したら、まとめた自社の経営課題を==== start ====と==== end ====で括って提示してください。`;
 
-                                
             //履歴に追加
             this.chatMessages.push({
                 id: Date.now(),
@@ -227,12 +237,16 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
-                chatInput.disabled = false;
+
 
             } catch (error) {
                 console.error('APIエラー:', error);
                         
                 this.stopLoadingAnimation(); //ローディング終了
+                this.showErrorModal = true; // エラーモーダルを表示
+                this.isStarted = false;  
+                this.buttonClass = 'default';  // STARTボタンのクラスを変更
+                this.chatMessages = [];
             }
         },
         startLoadingAnimation() {
@@ -260,6 +274,7 @@ export default {
             this.chatMessages = [];
             this.isStarted = false;
             this.buttonClass = 'default';
+            this.isInputDisabled = true;  // 入力欄を無効にする
         },
         async exportToSheet() {
             try {
@@ -288,7 +303,10 @@ export default {
             } else {
                 console.log("Not triggering exportToSheet");
             }
-        }
+        },
+        closeErrorModal() {
+            this.showErrorModal = false;
+        },
     },
     computed: {
         // 必須入力欄が全て入力されているか確認するcomputedプロパティ
