@@ -8,7 +8,7 @@ exports.handler = async function (event, context) {
     const { messages } = JSON.parse(event.body); //プロンプトを格納
 
     const endpoint = "https://scalar-test.openai.azure.com/";
-    const azureApiKey = `a${process.env.AZURE_OPENAI_API_KEY}`; 
+    const azureApiKey = `${process.env.AZURE_OPENAI_API_KEY}`; 
 
     const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
     const deploymentId = "gpt-4";
