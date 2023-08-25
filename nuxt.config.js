@@ -3,7 +3,7 @@ require('dotenv').config();
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Scalar Ai assistant',
+    title: 'Scalar Ai development',
     htmlAttrs: {
       lang: 'jp'
     },
