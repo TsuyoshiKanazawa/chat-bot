@@ -212,6 +212,7 @@ export default {
             //ローディングを開始
             this.startLoadingAnimation();
 
+            
             try {
                 // APIを呼び出し
                 const response = await fetch('/.netlify/functions/chat__', {
@@ -237,7 +238,7 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
-
+                this.isInputDisabled = false;
 
             } catch (error) {
                 console.error('APIエラー:', error);
