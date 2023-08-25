@@ -207,7 +207,7 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
-                chatInput.disabled = false;
+                this.isInputDisabled = false;
 
             } catch (error) {
                 console.error('APIエラー:', error);
