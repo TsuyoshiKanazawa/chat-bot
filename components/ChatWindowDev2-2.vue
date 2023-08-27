@@ -5,7 +5,7 @@
                 <h1 style="color: orange;">①プロンプト設定（インタビューUIの性格）</h1>
 
                 <p>▼AIの口調を指定したい場合に入力してください</p>
-                <input v-model="tone" type="text" placeholder="例）銀座スナックのママ">
+                <input v-model="tone" type="text" placeholder="例）大阪弁の経営コンサルタント">
             </div>
 
             <div class="devSection">
