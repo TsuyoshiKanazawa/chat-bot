@@ -26,7 +26,6 @@
             </div>
 
             <div class="buttonContainer">
-                <button @click="exportToSheet" class="spreadButton">チャット履歴を保存</button>
                 <button @click="resetChat" class="resetButton" :disabled="isLoading">CHAT RESET</button>
                 <button @click="startChat" :disabled="isStartDisabled"
                     :class="[buttonClass, { 'disabled': isStartDisabled }]">START</button>
