@@ -15,7 +15,6 @@
             </div>
 
             <div class="buttonContainer">
-                <button @click="exportToSheet" class="spreadButton">チャット履歴を保存</button>
                 <button @click="resetChat" class="resetButton" :disabled="isLoading">CHAT RESET</button>
                 <button @click="startChat" :disabled="isStartDisabled"
                     :class="[buttonClass, { 'disabled': isStartDisabled }]">START</button>
@@ -207,7 +206,7 @@ export default {
                 });
                 //ローディングを終了
                 this.stopLoadingAnimation();
-                this.isInputDisabled = false;
+                this.exportToSheet();
 
             } catch (error) {
                 console.error('APIエラー:', error);
@@ -250,7 +249,7 @@ export default {
             try {
                 const response = await this.$axios.$post('/exportToSheet', {
                     spreadMessages: this.spreadMessages,
-                    kinds: "02_自社の強み・独自性のヒアリング機能",
+                    kinds: "03_事業タイトル(30文字以内)要約機能",
                 });
                 if (response === 'Exported Successfully') {
                     // 成功した場合の処理をここに書く
