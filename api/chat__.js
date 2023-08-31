@@ -11,7 +11,7 @@ exports.handler = async function (event, context) {
     const azureApiKey = `${process.env.AZURE_OPENAI_API_KEY}`; 
 
     const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
-    const deploymentId = "gpt-4";
+    const deploymentId = "gpt-4-32k";
 
     try {
         const result = await client.getChatCompletions(deploymentId, messages, MaxTokens = 50);

@@ -50,10 +50,6 @@ export default {
     //baseURL: 'https://velvety-wisp-1cd5e2.netlify.app/.netlify/functions'
   },
 
-  serverMiddleware: [
-    { path: '/api', handler: '~/server.js' },
-  ],
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {
