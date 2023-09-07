@@ -325,11 +325,11 @@ IT導入補助金は、中小企業・小規模事業者の労働生産性の向
 
             } catch (error) {
                 console.error('APIエラー:', error);
-                        
+                
                 this.stopLoadingAnimation(); //ローディング終了
-                this.showErrorModal = true; // エラーモーダルを表示
+                this.showErrorModal = true; //エラーモーダルを表示
                 this.isStarted = false;  
-                this.buttonClass = 'default';  // STARTボタンのクラスを変更
+                this.buttonClass = 'default';  //STARTボタンのクラスを変更
                 this.chatMessages = [];
             }
         },
@@ -364,7 +364,7 @@ IT導入補助金は、中小企業・小規模事業者の労働生産性の向
             try {
                 const response = await this.$axios.$post('/exportToSheet', {
                     spreadMessages: this.spreadMessages,
-                    kinds:"01_経営課題のヒアリング機能",
+                    kinds:"04_ITツール導入による解決課題ヒアリング機能",
                 });
                 if (response === 'Exported Successfully') {
                     // 成功した場合の処理をここに書く
