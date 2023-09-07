@@ -58,6 +58,42 @@ export default {
             },
         };
     },
+    mounted() {
+        // URLのハッシュを読み取る
+        const hash = window.location.hash.replace('#', '');
+
+        // ハッシュに対応するコンポーネントを設定
+        switch (hash) {
+            case 'Chat1':
+                this.activeComponent = '01';
+                this.selectedDevFunction = '01';
+                this.selectedBusiness = '小規模事業者持続化補助金';
+                break;
+            case 'Chat2-1':
+                this.activeComponent = '02';
+                this.selectedDevFunction = '02';
+                this.selectedBusiness = '小規模事業者持続化補助金';
+                break;
+            case 'Chat2-2':
+                this.activeComponent = '03';
+                this.selectedDevFunction = '03';
+                this.selectedBusiness = '小規模事業者持続化補助金';
+                break;
+            case 'Chat3':
+                this.activeComponent = '04';
+                this.selectedDevFunction = '04';
+                this.selectedBusiness = '小規模事業者持続化補助金';
+                break;
+            case 'Chat4':
+                this.activeComponent = '05';
+                this.selectedDevFunction = '05';
+                this.selectedBusiness = 'IT導入補助金';
+                break;
+            default:
+                // デフォルトの設定（必要であれば）
+                break;
+        }
+    },
     computed: {
         availableDevFunctions() {
             return this.businessToFunctions[this.selectedBusiness] || [];
@@ -66,6 +102,28 @@ export default {
     methods: {
         loadSelectedDevFunction() {
             this.activeComponent = this.selectedDevFunction;
+
+            // アクティブなコンポーネントに基づいてURLのハッシュを変更
+            switch (this.activeComponent) {
+                case '01':
+                    window.location.hash = '#management_issue';
+                    break;
+                case '02':
+                    window.location.hash = '#strengths';
+                    break;
+                case '03':
+                    window.location.hash = '#strengths_v2';
+                    break;
+                case '04':
+                    window.location.hash = '#business_title';
+                    break;
+                case '05':
+                    window.location.hash = '#it_management_issue';
+                    break;
+                default:
+                    window.location.hash = ''; // デフォルト値
+                    break;
+            }
         },
     },
 };
