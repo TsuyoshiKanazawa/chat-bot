@@ -1,8 +1,10 @@
+const path = require('path');
 const xlsx = require('xlsx');
 
 exports.handler = async (event, context) => {
     try {
-        const workbook = xlsx.readFile('docs/ITツールリスト_0719.xlsx');
+        const filePath = path.join(__dirname, 'docs', 'ITツールリスト_0719.xlsx');
+        const workbook = xlsx.readFile(filePath);
         const sheet_name_list = workbook.SheetNames;
         const sheet = workbook.Sheets[sheet_name_list[0]];
         const tools = [];
