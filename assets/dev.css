@@ -382,3 +382,32 @@
 .loading p {
     margin: 0;
 }
+
+.devSection .toolsText {
+    background-color: #DFEEFF;
+    width: 80px;
+    font-size: 6px;
+    text-align: center;
+}
+
+.devSection select {
+    margin-left: 15px;
+    width: 160px;
+    height: 18px;
+    border: none;
+    background-color: #F6F6F6;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    padding: 0 5px;
+    box-sizing: border-box;
+    border: 1px solid #5F6368 !important;
+    border-radius: 9px;
+}
+
+.devSection select::placeholder {
+    font-size: 8px;
+    font-weight: 400;
+    color: #5F6368;
+    letter-spacing: 0.1em;
+}
