@@ -38,6 +38,7 @@ exports.handler = async (event, context) => {
             body: JSON.stringify({ tools, toolDetails, toolProcesses }) // tools, toolDetails, toolProcessesを返す
         };
     } catch (err) {
+        console.error(err); // エラーの詳細をログ出力
         return {
             statusCode: 500,
             body: JSON.stringify({ error: 'Failed to read Excel file' })
