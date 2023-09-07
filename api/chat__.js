@@ -14,7 +14,7 @@ exports.handler = async function (event, context) {
     const deploymentId = "gpt-4";
 
     try {
-        const result = await client.getChatCompletions(deploymentId, messages, MaxTokens = 100);
+        const result = await client.getChatCompletions(deploymentId, messages, MaxTokens = 50);
 
         // ログにendpointとdeploymentIdを出力
         console.log("Endpoint:", endpoint);

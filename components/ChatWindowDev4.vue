@@ -24,21 +24,24 @@
                 <select v-model="business" type="text">
                     <option value="農業・林業">農業・林業</option>
                     <option value="漁業">漁業</option>
-                    <option value="建設・土木業">建設・土木業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
-                    <option value="建設・土木業">建設・土木業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
-                    <option value="建設・土木業">建設・土木業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
-                    <option value="建設・土木業">建設・土木業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
-                    <option value="建設・土木業">建設・土木業</option>
+                    <option value="鉱業，採石業，砂利採取業">鉱業，採石業，砂利採取業</option>
+                    <option value="建設業">建設業</option>
+                    <option value="製造業">製造業</option>
+                    <option value="電気・ガス・熱供給・水道業">電気・ガス・熱供給・水道業</option>
+                    <option value="情報通信業">情報通信業</option>
+                    <option value="農業・林業">運輸業，郵便業</option>
+                    <option value="卸売業，小売業">卸売業，小売業</option>
+                    <option value="金融業，保険業">金融業，保険業</option>
+                    <option value="不動産業，物品賃貸業">不動産業，物品賃貸業</option>
+                    <option value="学術研究，専門・技術サービス業">学術研究，専門・技術サービス業</option>
+                    <option value="宿泊業，飲食サービス業">宿泊業，飲食サービス業</option>
+                    <option value="生活関連サービス業，娯楽業">生活関連サービス業，娯楽業</option>
+                    <option value="教育，学習支援業">教育，学習支援業</option>
+                    <option value="医療，福祉">医療，福祉</option>
+                    <option value="複合サービス事業">複合サービス事業</option>
+                    <option value="サービス業（他に分類されないもの）">サービス業（他に分類されないもの）</option>
+                    <option value="公務（他に分類されるものを除く）">公務（他に分類されるものを除く）</option>
+                    <option value="分類不能の産業">分類不能の産業</option>
                 </select>
 
                 <p>▼事業内容（必須）</p>
