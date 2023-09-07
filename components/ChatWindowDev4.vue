@@ -24,20 +24,21 @@
                 <select v-model="business" type="text">
                     <option value="農業・林業">農業・林業</option>
                     <option value="漁業">漁業</option>
+                    <option value="建設・土木業">建設・土木業</option>
                     <option value="農業・林業">農業・林業</option>
                     <option value="漁業">漁業</option>
+                    <option value="建設・土木業">建設・土木業</option>
+                    <option value="農業・林業">農業・林業</option>
                     <option value="農業・林業">農業・林業</option>
                     <option value="漁業">漁業</option>
+                    <option value="建設・土木業">建設・土木業</option>
                     <option value="農業・林業">農業・林業</option>
                     <option value="漁業">漁業</option>
+                    <option value="建設・土木業">建設・土木業</option>
+                    <option value="農業・林業">農業・林業</option>
                     <option value="農業・林業">農業・林業</option>
                     <option value="漁業">漁業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
-                    <option value="農業・林業">農業・林業</option>
-                    <option value="漁業">漁業</option>
+                    <option value="建設・土木業">建設・土木業</option>
                 </select>
 
                 <p>▼事業内容（必須）</p>
