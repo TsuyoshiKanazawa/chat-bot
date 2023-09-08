@@ -59,6 +59,11 @@ export default {
         };
     },
     mounted() {
+        const params = new URLSearchParams(window.location.search);
+        this.selectedBusiness = params.get('selectedBusiness') || this.selectedBusiness;
+        this.selectedDevFunction = params.get('selectedDevFunction') || this.selectedDevFunction;
+        this.activeComponent = params.get('activeComponent') || this.activeComponent;
+        
         // URLのハッシュを読み取る
         const hash = window.location.hash.replace('#', '');
 
@@ -94,6 +99,7 @@ export default {
                 break;
         }
     },
+
     computed: {
         availableDevFunctions() {
             return this.businessToFunctions[this.selectedBusiness] || [];
@@ -103,27 +109,11 @@ export default {
         loadSelectedDevFunction() {
             this.activeComponent = this.selectedDevFunction;
 
-            // アクティブなコンポーネントに基づいてURLのハッシュを変更
-            switch (this.activeComponent) {
-                case '01':
-                    window.location.hash = '#management_issue';
-                    break;
-                case '02':
-                    window.location.hash = '#strengths';
-                    break;
-                case '03':
-                    window.location.hash = '#strengths_v2';
-                    break;
-                case '04':
-                    window.location.hash = '#business_title';
-                    break;
-                case '05':
-                    window.location.hash = '#it_management_issue';
-                    break;
-                default:
-                    window.location.hash = ''; // デフォルト値
-                    break;
-            }
+            const query = new URLSearchParams({
+                selectedDevFunction: this.selectedDevFunction,
+                activeComponent: this.activeComponent,
+            });
+            window.history.pushState({}, null, '?' + query.toString());
         },
     },
 };

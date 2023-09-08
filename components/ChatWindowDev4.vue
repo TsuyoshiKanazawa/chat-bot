@@ -54,6 +54,8 @@
             
                 <p class="toolsText">導入予定ツール</p>
                 <selectTag :tools="tools" :selectedTool.sync="selectedTool"></selectTag>
+
+                
             </div>
 
             <div class="buttonContainer">
