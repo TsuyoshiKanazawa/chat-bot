@@ -99,7 +99,6 @@ export default {
                 break;
         }
     },
-
     computed: {
         availableDevFunctions() {
             return this.businessToFunctions[this.selectedBusiness] || [];

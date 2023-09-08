@@ -54,8 +54,8 @@
             
                 <p class="toolsText">導入予定ツール</p>
                 <selectTag :tools="tools" :selectedTool.sync="selectedTool"></selectTag>
-
-                
+                <p v-if="selectedToolDetail">選択したツールの詳細: {{ selectedToolDetail }}</p>
+                <p v-if="processColumns.length">対応するプロセス: {{ processColumns.join(', ') }}</p>
             </div>
 
             <div class="buttonContainer">
@@ -127,6 +127,8 @@ export default {
             selectedTool: '',
             toolProcesses: {}, // ツールに対応する〇がついた列名
             processColumns: [], // 選択されたツールに対応する〇がついた列名
+            toolDetails: {},  // エクセルから取得したツールの詳細情報
+            selectedToolDetail: '',  // 選択されたツールの詳細情報
         };
     },
     async mounted() {
@@ -173,6 +175,7 @@ export default {
                 }
             });
             console.log(this.processColumns)
+            this.selectedToolDetail = this.toolDetails[newVal] || '詳細なし';
         },
     },
     methods: {
